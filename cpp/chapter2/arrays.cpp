@@ -10,7 +10,6 @@ int main()
     cout<<"]";
 
     for(int i=0;i<=8;i++){
-        cout<<i;
         n[i] = n[i] + 1;
     }
 
