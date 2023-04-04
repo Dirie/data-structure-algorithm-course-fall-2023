@@ -16,7 +16,7 @@ class LinkedList:
 
 	'''This function is in LinkedList class.
 	It inserts a new node at the beginning'''
-	def insertAtHead(self, new_data):
+	def insertAtFirst(self, new_data):
 
 		# 1 & 2: Allocate the Node &
 		#	 Put in the data
@@ -58,7 +58,7 @@ class LinkedList:
 	'''This function is defined in Linked List class
 	Appends a new node at the end. This method is
 	defined inside LinkedList class shown above'''
-	def insertattail(self, new_data):
+	def insertatLast(self, new_data):
 
 		# 1. Create a new node
 		# 2. Put in the data
@@ -94,15 +94,15 @@ if __name__ == '__main__':
 	# Start with the empty list
 	llist = LinkedList()
 
-	llist.insertAtHead(1)
-	llist.insertAtHead(2)
-	print("After insertion at head:", end=" ")
+	llist.insertAtFirst(1)
+	llist.insertAtFirst(2)
+	print("After insertion at frist:", end=" ")
 	llist.printList()
 	print()
 
-	llist.insertattail(4)
-	llist.insertattail(5)
-	print("After insertion at tail:", end=" ")
+	llist.insertatLast(4)
+	llist.insertatLast(5)
+	print("After insertion at last:", end=" ")
 	llist.printList()
 	print()
 
