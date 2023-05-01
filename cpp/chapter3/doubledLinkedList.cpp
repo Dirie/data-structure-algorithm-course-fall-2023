@@ -1,84 +1,163 @@
+#include <bits/stdc++.h>
 #include <iostream>
-#include <cstring>
-#include <cstdlib>
-#include <cstdbool>
 
-struct node {
-   int data;
-   int key;
-   struct node *next;
-   struct node *prev;
+using namespace std;
+
+// A linked list node
+class Node {
+public:
+	int data;
+	Node* next;
+	Node* prev;
 };
 
-//this link always point to first Link
-struct node *head = NULL;
+/* Given a reference (pointer to pointer)
+to the head of a list and an int, inserts a new node on the
+front of the list. */
 
-//this link always point to last Link
-struct node *last = NULL;
-struct node *current = NULL;
+void push(Node** head_ref, int new_data)
+{
+	/* 1. allocate node */
+	Node* new_node = new Node();
 
-//is list empty
-bool isEmpty(){
-   return head == NULL;
+	/* 2. put in the data */
+	new_node->data = new_data;
+
+	/* 3. Make next of new node as head
+	and previous as NULL */
+	new_node->next = (*head_ref);
+	new_node->prev = NULL;
+
+	/* 4. change prev of head node to new node */
+	if ((*head_ref) != NULL)
+		(*head_ref)->prev = new_node;
+
+	/* 5. move the head to point to the new node */
+	(*head_ref) = new_node;
 }
 
-//display the doubly linked list
-void printList(){
-   struct node *ptr = head;
-   while(ptr != NULL) {
-      printf("(%d,%d) ",ptr->key,ptr->data);
-      ptr = ptr->next;
-   }
+/* Given a node as prev_node, insert
+a new node after the given node */
+void insertAfter(Node* prev_node, int new_data)
+{
+	/*1. check if the given prev_node is NULL */
+	if (prev_node == NULL) {
+		cout << "the given previous node cannot be NULL";
+		return;
+	}
+
+	/* 2. allocate new node */
+	Node* new_node = new Node();
+
+	/* 3. put in the data */
+	new_node->data = new_data;
+
+	/* 4. Make next of new node as next of prev_node */
+	new_node->next = prev_node->next;
+
+	/* 5. Make the next of prev_node as new_node */
+	prev_node->next = new_node;
+
+	/* 6. Make prev_node as previous of new_node */
+	new_node->prev = prev_node;
+
+	/* 7. Change previous of new_node's next node */
+	if (new_node->next != NULL)
+		new_node->next->prev = new_node;
 }
 
-//insert link at the first location
-void insertFirst(int key, int data){
+/* Given a reference (pointer to pointer) to the head
+of a DLL and an int, appends a new node at the end */
+void append(Node** head_ref, int new_data)
+{
+	/* 1. allocate node */
+	Node* new_node = new Node();
 
-   //create a link
-   struct node *link = (struct node*) malloc(sizeof(struct node));
-   link->key = key;
-   link->data = data;
-   if(isEmpty()) {
+	Node* last = *head_ref; /* used in step 5*/
 
-      //make it the last link
-      last = link;
-   } else {
+	/* 2. put in the data */
+	new_node->data = new_data;
 
-      //update first prev link
-      head->prev = link;
-   }
+	/* 3. This new node is going to be the last node, so
+		make next of it as NULL*/
+	new_node->next = NULL;
 
-   //point it to old first link
-   link->next = head;
+	/* 4. If the Linked List is empty, then make the new
+		node as head */
+	if (*head_ref == NULL) {
+		new_node->prev = NULL;
+		*head_ref = new_node;
+		return;
+	}
 
-   //point first to new first link
-   head = link;
-}
-struct node* deleteFirst(){
+	/* 5. Else traverse till the last node */
+	while (last->next != NULL)
+		last = last->next;
 
-   //save reference to first link
-   struct node *tempLink = head;
+	/* 6. Change the next of last node */
+	last->next = new_node;
 
-   //if only one link
-   if(head->next == NULL) {
-      last = NULL;
-   } else {
-      head->next->prev = NULL;
-   }
-   head = head->next;
+	/* 7. Make last node as previous of new node */
+	new_node->prev = last;
 
-   //return the deleted link
-   return tempLink;
+	return;
 }
 
-int main(){
-   insertFirst(1,10);
-   insertFirst(2,20);
-   insertFirst(3,30);
-   insertFirst(4,1);
-   insertFirst(5,40);
-   insertFirst(6,56);
-   printf("\nDoubly Linked List: ");
-   printList();
-   return 0;
+// This function prints contents of
+// linked list starting from the given node
+void printList(Node* node)
+{
+    cout<<"\nN.B: It displays the doubled linked list in two ways, forward and reverse direction:"<<endl;
+	Node* last;
+	cout << "\nTraversal in forward direction \n";
+	while (node != NULL) {
+		cout << node->data << " ";
+		last = node;
+		node = node->next;
+	}
+
+	cout << "\nTraversal in reverse direction \n";
+	while (last != NULL) {
+		cout << last->data << " ";
+		last = last->prev;
+	}
 }
+
+// Driver code
+int main()
+{
+	/* Start with the empty list */
+	Node* head = NULL;
+
+	// Insert 6. So linked list becomes 6->NULL
+	append(&head, 6);
+
+	// Insert 7 at the beginning. So
+	// linked list becomes 7->6->NULL
+	push(&head, 7);
+
+	// Insert 1 at the beginning. So
+	// linked list becomes 1->7->6->NULL
+	push(&head, 1);
+
+	// Insert 4 at the end. So linked
+	// list becomes 1->7->6->4->NULL
+	append(&head, 4);
+
+	// Insert 8, after 7. So linked
+	// list becomes 1->7->8->6->4->NULL
+	insertAfter(head->next, 8);
+
+	// Insert 9, after 8. So linked
+	// list becomes 1->7->9->8->6->4->NULL
+    insertAfter(head->next, 9);
+
+
+
+	cout << "Created DLL is: ";
+	printList(head);
+
+	return 0;
+}
+
+// This is code is contributed by rathbhupendra
